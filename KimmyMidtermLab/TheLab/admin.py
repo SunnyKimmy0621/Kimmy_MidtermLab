@@ -1,9 +1,23 @@
 from django.contrib import admin
 from .models import Department, Job, Organization, Employee, OrgMember
 
-admin.site.register(Department)
-admin.site.register(Job)
-admin.site.register(Organization)
+@admin.register(Department)
+class DepartmentAdmin(admin.ModelAdmin):
+    list_display = ('department_name', 'created_at', 'updated_at')
+    search_fields = ('department_name',)
+    list_filter = ('created_at',)
+
+@admin.register(Job)
+class JobAdmin(admin.ModelAdmin):
+    list_display = ('job_name', 'department')
+    search_fields = ('job_name', 'department__department_name')
+    list_filter = ('department',)
+
+@admin.register(Organization)
+class OrganizationAdmin(admin.ModelAdmin):
+    list_display = ('name', 'department', 'description')
+    search_fields = ('name', 'description')
+    list_filter = ('department',)
 
 @admin.register(Employee)
 class EmployeeAdmin(admin.ModelAdmin):
