@@ -16,7 +16,7 @@ class OrgMemberAdmin(admin.ModelAdmin):
     search_fields = ("employee__lastname", "employee__firstname",)
 
     def get_member_program(self, obj):
-        return obj.employee.Job if obj.employee else None
+        return obj.employee.job if obj.employee else None
     get_member_program.short_description = "Job"
 
 
