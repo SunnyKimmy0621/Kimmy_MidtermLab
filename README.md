@@ -1,7 +1,7 @@
 # Kimmy_MidtermLab
 
 ## 🧩 Project Description
-This project is a Django web application designed to manage colleges, programs, organizations, and student memberships efficiently.  
+This project is a Django web application designed to manage Departments, Jobs, organizations, and student memberships efficiently.  
 It allows admin users to view and manage academic and organizational data through Django’s admin panel.
 
 ## 🚀 Features
