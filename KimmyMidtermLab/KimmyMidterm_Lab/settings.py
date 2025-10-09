@@ -50,7 +50,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'KimmyMidtermLab.urls'
+ROOT_URLCONF = 'KimmyMidterm_Lab.urls'
 
 TEMPLATES = [
     {
@@ -67,7 +67,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'KimmyMidtermLab.wsgi.application'
+WSGI_APPLICATION = 'KimmyMidterm_Lab.wsgi.application'
 
 
 # Database
