@@ -7,7 +7,7 @@ from TheLab import views
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("accounts/", include("allauth.urls")), # allauth routes
-    path('', include('.urls')),
+    path('', include('TheLab.urls')),
     path('', views.HomePageView.as_view(), name='home'),
 
     #Organization URLs
