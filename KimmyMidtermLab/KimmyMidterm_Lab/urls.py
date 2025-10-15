@@ -1,10 +1,13 @@
 from django.contrib import admin
 from django.urls import path
+from django.urls import path, include
 from TheLab.views import HomePageView, OrganizationList, OrganizationCreateView, OrganizationUpdateView, OrganizationDeleteView, DepartmentListView, DepartmentCreateView, DepartmentUpdateView, DepartmentDeleteView, JobListView, JobCreateView, JobUpdateView, JobDeleteView, EmployeeListView, EmployeeCreateView, EmployeeUpdateView, EmployeeDeleteView, OrgMemberListView, OrgMemberCreateView, OrgMemberUpdateView, OrgMemberDeleteView
 from TheLab import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("accounts/", include("allauth.urls")), # allauth routes
+    path('', include('.urls')),
     path('', views.HomePageView.as_view(), name='home'),
 
     #Organization URLs
@@ -14,7 +17,7 @@ urlpatterns = [
     path('organization_list/<pk>/delete/', OrganizationDeleteView.as_view(), name='organization-delete'),
 
     #Department URLs
-     path('departments/', DepartmentListView.as_view(), name='department-list'),
+    path('departments/', DepartmentListView.as_view(), name='department-list'),
     path('departments/add/', DepartmentCreateView.as_view(), name='department-add'),
     path('departments/<int:pk>/edit/', DepartmentUpdateView.as_view(), name='department-edit'),
     path('departments/<int:pk>/delete/', DepartmentDeleteView.as_view(), name='department-delete'),

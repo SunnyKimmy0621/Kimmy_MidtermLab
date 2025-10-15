@@ -34,6 +34,19 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-md-12">
+                            <form method="get" class="d-flex align-items-center gap-2">
+                            <div class="col-auto">
+                                <label for="sortSelect" class="fw-semibold mb-0">Sort by</label>
+                                <select id="sortSelect" name="sort_by" class="form-select rounded-pill" style="width: 150px;">
+                                    <option value="employee" {% if request.GET.sort_by == 'employee' %}selected{% endif %}>Employee (A–Z)</option>
+                                    <option value="-employee" {% if request.GET.sort_by == '-employee' %}selected{% endif %}>Employee (Z–A)</option>
+                                    <option value="organization" {% if request.GET.sort_by == 'organization' %}selected{% endif %}>Organization (A–Z)</option>
+                                    <option value="-organization" {% if request.GET.sort_by == '-organization' %}selected{% endif %}>Organization (Z–A)</option>
+                                </select>
+                                <button type="submit" class="btn btn-primary rounded-pill px-4">Sort</button>
+                            </form>
+                        </div> 
 
                     <div class="card-body">
                         <table class="table table-striped mt-3">
