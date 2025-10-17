@@ -2245,7 +2245,7 @@ body {
   width: calc(100% - 260px);
   min-height: 100%;
   float: right;
-  background: #f2f3f8;
+  background: #b4deff !important; /* Morning Dew */
 }
 .main-panel .content {
   padding: 30px 15px;

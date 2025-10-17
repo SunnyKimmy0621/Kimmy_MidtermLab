@@ -1,36 +1,36 @@
+# TheLab/admin.py
 from django.contrib import admin
-from .models import Department, Job, Organization, Employee, OrgMember
+from .models import Priority, Category, Task, Note, SubTask
 
-@admin.register(Department)
-class DepartmentAdmin(admin.ModelAdmin):
-    list_display = ('department_name', 'created_at', 'updated_at')
-    search_fields = ('department_name',)
-    list_filter = ('created_at',)
+@admin.register(Priority)
+class PriorityAdmin(admin.ModelAdmin):
+    list_display = ("name", "created_at")
+    search_fields = ("name",)
 
-@admin.register(Job)
-class JobAdmin(admin.ModelAdmin):
-    list_display = ('job_name', 'department')
-    search_fields = ('job_name', 'department__department_name')
-    list_filter = ('department',)
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ("name", "created_at")
+    search_fields = ("name",)
 
-@admin.register(Organization)
-class OrganizationAdmin(admin.ModelAdmin):
-    list_display = ('name', 'department', 'description')
-    search_fields = ('name', 'description')
-    list_filter = ('department',)
+@admin.register(Task)
+class TaskAdmin(admin.ModelAdmin):
+    list_display = ("title", "status", "deadline", "priority", "category", "created_at")
+    list_filter = ("status", "priority", "category")
+    search_fields = ("title", "description")
+    date_hierarchy = "deadline"   # if you want date drilldown
+    ordering = ("-created_at",)
 
-@admin.register(Employee)
-class EmployeeAdmin(admin.ModelAdmin):
-    list_display = ("employee_id", "lastname","firstname", "middlename",)
-    search_fields = ("lastname", "firstname",)
+@admin.register(Note)
+class NoteAdmin(admin.ModelAdmin):
+    list_display = ("task", "created_at")
+    search_fields = ("content",)
+    list_filter = ("created_at",)
 
-@admin.register(OrgMember)
-class OrgMemberAdmin(admin.ModelAdmin):
-    list_display = ("employee", "organization", "get_member_program", "date_joined",)
-    search_fields = ("employee__lastname", "employee__firstname",)
+@admin.register(SubTask)
+class SubTaskAdmin(admin.ModelAdmin):
+    list_display = ("title", "parent_task", "status", "created_at")
+    list_filter = ("status",)
+    search_fields = ("title",)
 
-    def get_member_program(self, obj):
-        return obj.employee.job if obj.employee else None
-    get_member_program.short_description = "Job"
 
 

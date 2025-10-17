@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Subtasks</h2>
+    <table class="table table-striped mt-3">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Status</th>
+                <th>Parent Task</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for subtask in subtasks %}
+            <tr>
+                <td>{{ subtask.title }}</td>
+                <td>{{ subtask.status }}</td>
+                <td>{{ subtask.parent_task.title }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="3">No subtasks yet.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
