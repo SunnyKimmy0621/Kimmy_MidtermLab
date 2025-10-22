@@ -1,28 +1,29 @@
 from django.forms import ModelForm
 from django import forms
-from .models import Organization, Department, Job, Employee, OrgMember
+from TheLab.models import Category, Note, Priority, Task, SubTask
 
-class OrganizationForm(ModelForm):
+
+class CategoryForm(ModelForm):
     class Meta:
-        model = Organization
+        model = Category
         fields = "__all__"
 
-class DepartmentForm(forms.ModelForm):
+class NoteForm(ModelForm):
     class Meta:
-        model = Department
-        fields = '__all__'
+        model = Note
+        fields = "__all__"
 
-class JobForm(forms.ModelForm):
+class PriorityForm(ModelForm):
     class Meta:
-        model = Job
-        fields = '__all__'
+        model = Priority
+        fields = "__all__"
 
-class EmployeeForm(forms.ModelForm):
+class SubTaskForm(ModelForm):
     class Meta:
-        model = Employee
-        fields = '__all__'
+        model = SubTask
+        fields = "__all__"
 
-class OrgMemberForm(forms.ModelForm):
+class TaskForm(ModelForm):
     class Meta:
-        model = OrgMember
-        fields = '__all__'
+        model = Task
+        fields = "__all__"

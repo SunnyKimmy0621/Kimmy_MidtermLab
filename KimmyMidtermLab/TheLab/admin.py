@@ -17,7 +17,7 @@ class TaskAdmin(admin.ModelAdmin):
     list_display = ("title", "status", "deadline", "priority", "category", "created_at")
     list_filter = ("status", "priority", "category")
     search_fields = ("title", "description")
-    date_hierarchy = "deadline"   # if you want date drilldown
+    date_hierarchy = "deadline"   
     ordering = ("-created_at",)
 
 @admin.register(Note)

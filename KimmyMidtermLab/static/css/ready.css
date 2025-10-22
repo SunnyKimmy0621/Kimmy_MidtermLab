@@ -23,7 +23,7 @@
 }
 
 .bg-info {
-  background: #23CCEF !important;
+  background: #5ed5ed !important;
 }
 
 .bg-success {
@@ -2245,7 +2245,7 @@ body {
   width: calc(100% - 260px);
   min-height: 100%;
   float: right;
-  background: #b4deff !important; /* Morning Dew */
+  background: #c1f1e6 !important; /* Sea Mist */
 }
 .main-panel .content {
   padding: 30px 15px;
