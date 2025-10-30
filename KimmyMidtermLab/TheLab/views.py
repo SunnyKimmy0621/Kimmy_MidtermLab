@@ -66,19 +66,26 @@ class NoteList(ListView):
     def get_queryset(self):
         qs = super().get_queryset()
         query = self.request.GET.get('q')
+
         if query:
-            qs = qs.filter( 
-                Q(task__title__icontains=query) |
+            qs = qs.filter(
+                Q(task__icontains=query) |   # corrected this line
                 Q(content__icontains=query)
-                ) 
-        return qs 
-    
+            )
+
+        ordering = self.get_ordering()
+        if ordering:
+            qs = qs.order_by(ordering)
+
+        return qs
+
     def get_ordering(self):
-        allowed = ["task", "content",]
+        allowed = ["task", "content", "-task", "-content"]
         sort_by = self.request.GET.get("sort_by")
         if sort_by in allowed:
             return sort_by
-        return "task"
+        return "task"   # default
+
 
 class PriorityList(ListView):
     model = Priority

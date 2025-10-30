@@ -1,70 +1,136 @@
-{% extends 'base.html' %} {% load static %} {% block content %}
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<style>
+/* tiny, scoped tweaks — safe to move to your main stylesheet later */
+.task-list-controls {
+  gap: 12px;
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+}
+.task-list-controls .form-control,
+.task-list-controls .form-select {
+  min-width: 180px;
+}
+.task-status-badge {
+  display: inline-block;
+  padding: .35em .6em;
+  font-size: .8125rem;
+  border-radius: .3rem;
+}
+.task-status-badge.pending { background: #ffe9b3; color: #6a4b00; } /* subtle warning */
+.task-status-badge.in_progress { background: #d9f0ff; color: #005b8a; } /* info */
+.task-status-badge.completed { background: #d9ffd9; color: #0b6623; } /* success */
+.table-actions .btn { margin-right: .35rem; }
+@media (max-width: 576px) {
+  .task-list-controls { gap: 8px; }
+  .task-list-controls .form-control, .task-list-controls .form-select { min-width: 140px; width: 100%; }
+}
+</style>
+
 <div class="content">
   <div class="container-fluid">
     <h4 class="page-title">Home</h4>
+
     <div class="row">
       <div class="col-md-12">
         <div class="card">
+          <!-- Header stays compatible with your theme -->
           <div class="card-header">
-            <div class="card-title">List of Notes</div>
-            <div class="card-category">Page 3</div>
-          </div>
-          <br />
-          <div class="col-md-12 row">
-            <div class="col-md-6">
-              <form class="navbar-left navbar-form nav-search mr-md-3" action="" method="get">
-                <div class="input-group">
-                  <input type="text" placeholder="Search ..." class="form-control" name="q" value="{{ request.GET.q }}" />
-                  <div class="input-group-append">
-                    <span class="input-group-text">
-                      <i class="la la-search search-icon"></i>
-                    </span>
-                  </div>
-                </div>
-              </form>
-            </div>
-            <div class="col-md-6">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <div class="card-title">List of Notes</div>
+                <div class="card-category">Page 3</div>
+              </div>
               <div class="pull-right">
                 <a href="{% url 'note-add' %}" class="btn btn-success btn-rounded">Add Notes</a>
               </div>
             </div>
           </div>
+
           <div class="card-body">
-            <table class="table table-striped mt-3">
-              <thead>
-                <tr>
-                  <th scope="col">TASK</th>
-                  <th scope="col">CONTENT</th>
 
-                  <th scope="col">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for object in object_list %}
-                <tr>
-                  <td>{{ object.task }}</td>
-                  <td>{{ object.content }}</td>
+            <!-- Controls row using original theme form classes -->
+            <form action="" method="get" class="navbar-left navbar-form nav-search mr-md-3 mb-3 task-list-controls">
+              <!-- Search -->
+              <input type="text" name="q" class="form-control" placeholder="Search ..." value="{{ request.GET.q }}">
 
-                  <td>
-                    <a href="note_list/{{ object.id }}">Edit</a>
-                    <a href="note_list/{{ object.id }}/delete" class="text-danger">Delete</a>
-                  </td>
-                </tr>
-                {% empty %}
-                <tr>
-                  <td colspan="4" style="text-align: center">
-                    <p class="text-sm font-weight-bold mb-0">No Records Found</p>
-                  </td>
-                </tr>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
+              <!-- Status Dropdown (populated according to your models) -->
+              <select name="status" class="form-select">
+                <option value="">All Status</option>
+                <option value="pending" {% if request.GET.status == 'pending' %}selected{% endif %}>Pending</option>
+                <option value="in_progress" {% if request.GET.status == 'in_progress' %}selected{% endif %}>In Progress</option>
+                <option value="completed" {% if request.GET.status == 'completed' %}selected{% endif %}>Completed</option>
+              </select>
+
+              <!-- Sort dropdown kept minimal (optional) -->
+              <select name="sort_by" class="form-select">
+                <option value="">Sort By</option>
+                <option value="task" {% if request.GET.sort_by == 'task' %}selected{% endif %}>Task (A→Z)</option>
+                <option value="-task" {% if request.GET.sort_by == '-task' %}selected{% endif %}>Task (Z→A)</option>
+                <option value="content" {% if request.GET.sort_by == 'content' %}selected{% endif %}>Content (A→Z)</option>
+                <option value="-content" {% if request.GET.sort_by == '-content' %}selected{% endif %}>Content (Z→A)</option>
+              </select>
+
+              <!-- Submit -->
+              <button type="submit" class="btn btn-default btn-round">
+                <i class="la la-search"></i>
+              </button>
+            </form>
+
+            <!-- Table -->
+            <div class="table-responsive">
+              <table class="table table-striped mt-3">
+                <thead>
+                  <tr>
+                    <th>Task</th>
+                    <th>Content</th>
+                    <th>Status</th>
+                    <th class="text-center">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for object in object_list %}
+                  <tr>
+                    <!-- Note object has relation to Task -->
+                    <td>{{ object.task.title }}</td>
+                    <td>{{ object.content }}</td>
+
+                    <!-- Status badge — uses small scoped classes above so your theme colors won't be overridden -->
+                    <td>
+                      {% if object.task.status == "pending" %}
+                        <span class="task-status-badge pending">Pending</span>
+                      {% elif object.task.status == "in_progress" %}
+                        <span class="task-status-badge in_progress">In Progress</span>
+                      {% elif object.task.status == "completed" %}
+                        <span class="task-status-badge completed">Completed</span>
+                      {% else %}
+                        <span class="task-status-badge">{{ object.task.status }}</span>
+                      {% endif %}
+                    </td>
+
+                    <td class="text-center table-actions">
+
+                      <a href="{% url 'note-delete' object.id %}" class="btn btn-sm btn-outline-danger btn-round">Delete</a>
+                    </td>
+                  </tr>
+                  {% empty %}
+                  <tr>
+                    <td colspan="4" class="text-center">
+                      <p class="text-sm font-weight-bold mb-0">No Records Found</p>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+
             {% include 'includes/pagination.html' %}
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+          </div> <!-- card-body -->
+        </div> <!-- card -->
+      </div> <!-- col -->
+    </div> <!-- row -->
+  </div> <!-- container -->
+</div> <!-- content -->
 {% endblock %}

@@ -1,51 +1,79 @@
 from django.core.management.base import BaseCommand
 from faker import Faker
-from TheLab.models import Department, Job, Organization, Employee, OrgMember 
+from TheLab.models import Priority, Category, Task, SubTask, Note
+import random
+from django.utils import timezone
+
 
 class Command(BaseCommand):
-    help = 'Create initial data for the application'
+    help = 'Create initial test data for TheLab Task System'
 
     def handle(self, *args, **kwargs):
-        self.create_organization(10)
-        self.create_employees(50)
-        self.create_membership(10)
+        self.create_priorities()
+        self.create_categories()
+        self.create_tasks(30)        # generate 30 tasks
+        self.create_subtasks(60)     # generate 60 subtasks
+        self.create_notes(50)        # generate 50 notes
 
-    def create_organization(self, count):
+        self.stdout.write(self.style.SUCCESS("✅ Initial data created successfully."))
+
+    def create_priorities(self):
+        priorities = ["High", "Medium", "Low"]
+        for p in priorities:
+            Priority.objects.get_or_create(name=p)
+        self.stdout.write(self.style.SUCCESS("→ Priorities loaded."))
+
+    def create_categories(self):
         fake = Faker()
-        for _ in range(count):
-            words = [fake.word() for _ in range(2)]  # two random words
-            organization_name = ' '.join(words)
-            Organization.objects.create(
-                name=organization_name.title(),
-                department=Department.objects.order_by('?').first(),
-                description=fake.sentence()
-            )
-        self.stdout.write(self.style.SUCCESS(
-            'Initial data for organizations created successfully.'
-        ))
+        for _ in range(8):
+            Category.objects.get_or_create(name=fake.word().title())
+        self.stdout.write(self.style.SUCCESS("→ Categories loaded."))
 
-    def create_employees(self, count):
-        fake = Faker('en_PH')
-        for _ in range(count):
-            Employee.objects.create(
-                employee_id=f"{fake.random_int(2020, 2025)}-{fake.random_int(1, 8)}-{fake.random_number(digits=4)}",
-                lastname=fake.last_name(),
-                firstname=fake.first_name(),
-                middlename=fake.last_name(),
-                job=Job.objects.order_by('?').first(),
-            )
-        self.stdout.write(self.style.SUCCESS(
-            'Initial data for employees created successfully.'
-        ))
-
-    def create_membership(self, count):
+    def create_tasks(self, count):
         fake = Faker()
+        statuses = ["pending", "in_progress", "completed"]
+        categories = list(Category.objects.all())
+        priorities = list(Priority.objects.all())
+
         for _ in range(count):
-            OrgMember.objects.create(
-                employee=Employee.objects.order_by('?').first(),
-                organization=Organization.objects.order_by('?').first(),
-                date_joined=fake.date_between(start_date="-2y", end_date="today"),
+            Task.objects.create(
+                title=fake.sentence(nb_words=4),
+                description=fake.paragraph(),
+                deadline=fake.date_time_between(start_date="now", end_date="+30d", tzinfo=timezone.get_current_timezone()),
+                status=random.choice(statuses),
+                category=random.choice(categories),
+                priority=random.choice(priorities),
             )
-        self.stdout.write(self.style.SUCCESS(
-            'Initial data for employee organization memberships created successfully.'
-        ))
+        self.stdout.write(self.style.SUCCESS("→ Tasks created."))
+
+    def create_subtasks(self, count):
+        fake = Faker()
+        statuses = ["pending", "in_progress", "completed"]
+        tasks = list(Task.objects.all())
+
+        if not tasks:
+            self.stdout.write(self.style.WARNING("No tasks found — skipping subtasks."))
+            return
+
+        for _ in range(count):
+            SubTask.objects.create(
+                parent_task=random.choice(tasks),
+                title=fake.sentence(nb_words=3),
+                status=random.choice(statuses),
+            )
+        self.stdout.write(self.style.SUCCESS("→ Subtasks created."))
+
+    def create_notes(self, count):
+        fake = Faker()
+        tasks = list(Task.objects.all())
+
+        if not tasks:
+            self.stdout.write(self.style.WARNING("No tasks found — skipping notes."))
+            return
+
+        for _ in range(count):
+            Note.objects.create(
+                task=random.choice(tasks),
+                content=fake.paragraph(),
+            )
+        self.stdout.write(self.style.SUCCESS("→ Notes created."))
