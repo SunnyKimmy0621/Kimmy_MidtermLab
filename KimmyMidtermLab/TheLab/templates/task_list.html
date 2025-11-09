@@ -1,101 +1,124 @@
-{% extends 'base.html' %} {% load static %} {% block content %}
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
 <div class="content">
   <div class="container-fluid">
-    <h4 class="page-title">Home</h4>
-    <div class="row">
-      <div class="col-md-12">
-        <div class="card">
-          <div class="card-header">
-            <div class="card-title">List of Tasks</div>
-            <div class="card-category">Page 6</div>
-          </div>
-          <br />
-          <div class="col-md-12 row">
-            <div class="col-md-6">
-              <form class="navbar-left navbar-form nav-search mr-md-3" action="" method="get">
-                <div class="input-group">
-                  <input type="text" placeholder="Search ..." class="form-control" name="q" value="{{ request.GET.q }}" />
-                  <div class="input-group-append">
-                    <span class="input-group-text">
-                      <i class="la la-search search-icon"></i>
-                    </span>
-                  </div>
-                </div>
-              </form>
-            </div>
-            <div class="col-md-12 mb-3 ms-4">
-              <form method="get" class="row g-2 align-items-center">
-                {% if request.GET.q %}
-                  <input type="hidden" name="q" value="{{ request.GET.q }}">
-                {% endif %}
 
-                <div class="col-auto">
-                  <label for="smallSelect" class="col-form-label">Sort by</label>
-                </div>
-                <div class="col-auto">
-                  <select class="form-control form-control-sm" id="smallSelect" name="sort_by">
-                    <option value="title" {% if request.GET.sort_by == "title" %}selected{% endif %}>
-                      Title
-                    </option>
-                    <option value="deadline" {% if request.GET.sort_by == "deadline" %}selected{% endif %}>
-                      Deadline
-                    </option>
-                    <option value="status" {% if request.GET.sort_by == "status" %}selected{% endif %}>
-                      Status
-                    </option>
-                  </select>
-                </div>
-                <div class="col-auto">
-                  <button type="submit" class="btn btn-primary btn-sm btn-rounded">Sort</button>
-                </div>
-              </form>
+    <h4 class="page-title">List of Tasks</h4>
+    <p class="text-muted">Page {{ page_obj.number }}</p>
+
+    <div class="card">
+      <div class="card-body">
+
+        <!-- Controls -->
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+
+          <!-- Search -->
+          <form method="get" class="d-flex align-items-center mb-2">
+            <div class="input-group">
+              <input type="text" name="q" class="form-control" placeholder="Search ..." value="{{ request.GET.q }}">
+              <button class="input-group-text"><i class="la la-search"></i></button>
             </div>
-            <div class="col-md-6">
-              <div class="pull-right">
-                <a href="{% url 'task-add' %}" class="btn btn-success btn-rounded">Add Task</a>
-              </div>
-            </div>
-          </div>
-          <div class="card-body">
-            <table class="table table-striped mt-3">
-              <thead>
-                <tr>
-                  <th scope="col">TITLE</th>
-                  <th scope="col">STATUS</th>
-                  <th scope="col">DEADLINE</th>
-                  <th scope="col">PRIORITY</th>
-                  <th scope="col">CATEGORY</th>
-                  <th scope="col">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for object in object_list %}
-                <tr>
-                  <td>{{ object.title }}</td>
-                  <td>{{ object.status }}</td>
-                  <td>{{ object.deadline }}</td>
-                  <td>{{ object.priority }}</td>
-                  <td>{{ object.category }}</td>
-                  <td>
-                    <a href="task_list/{{ object.id }}">Edit</a>
-                    <a href="task_list/{{ object.id }}/delete" class="text-danger">Delete</a>
-                  </td>
-                </tr>
-                {% empty %}
-                <tr>
-                  <td colspan="4" style="text-align: center">
-                    <p class="text-sm font-weight-bold mb-0">No Records Found</p>
-                  </td>
-                </tr>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-            {% include 'includes/pagination.html' %}
-          </div>
+          </form>
+
+          <!-- Sort -->
+          <form method="get" class="d-flex align-items-center gap-2 mb-2">
+            {% if request.GET.q %}
+              <input type="hidden" name="q" value="{{ request.GET.q }}">
+            {% endif %}
+            <label class="mb-0">Sort by</label>
+            <select name="sort_by" class="form-select form-select-sm" style="width: 160px;">
+              <option value="title" {% if request.GET.sort_by == 'title' %}selected{% endif %}>Title</option>
+              <option value="deadline" {% if request.GET.sort_by == 'deadline' %}selected{% endif %}>Deadline</option>
+              <option value="status" {% if request.GET.sort_by == 'status' %}selected{% endif %}>Status</option>
+            </select>
+            <button type="submit" class="btn btn-primary btn-sm">Sort</button>
+          </form>
+
+          <!-- Add Button -->
+          <a href="{% url 'task-add' %}" class="btn btn-success btn-sm">Add Task</a>
         </div>
+
+        <!-- Table -->
+        <table class="table">
+          <thead class="table-light">
+            <tr>
+              <th>TITLE</th>
+              <th>STATUS</th>
+              <th>DEADLINE</th>
+              <th style="width:120px;">Action</th>
+            </tr>
+          </thead>
+
+          <tbody>
+          {% for task in object_list %}
+            <tr>
+              <td>{{ task.title }}</td>
+
+              <td>
+                {% if task.status == "Completed" %}
+                  <span class="badge bg-success">Completed</span>
+                {% elif task.status == "In Progress" %}
+                  <span class="badge bg-info text-dark">In Progress</span>
+                {% else %}
+                  <span class="badge bg-warning text-dark">Pending</span>
+                {% endif %}
+              </td>
+
+              <td>
+                {% if task.deadline %}
+                  {{ task.deadline|date:"M d, Y" }}
+                {% else %} — {% endif %}
+              </td>
+
+              <td>
+                <a href="{% url 'task-update' task.id %}" class="text-primary me-2">Edit</a>
+                <a href="{% url 'task-delete' task.id %}" class="text-danger">Delete</a>
+              </td>
+            </tr>
+          {% empty %}
+            <tr><td colspan="4" class="text-center text-muted">No Records Found</td></tr>
+          {% endfor %}
+          </tbody>
+        </table>
+
+        <!-- Pagination -->
+        <nav>
+          <ul class="pagination">
+            {% if page_obj.has_previous %}
+              <li class="page-item"><a class="page-link" href="?page=1">First</a></li>
+              <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Prev</a></li>
+            {% else %}
+              <li class="page-item disabled"><span class="page-link">First</span></li>
+              <li class="page-item disabled"><span class="page-link">Prev</span></li>
+            {% endif %}
+
+            {% for p in page_obj.paginator.page_range %}
+              {% if p == page_obj.number %}
+                <li class="page-item active"><span class="page-link">{{ p }}</span></li>
+              {% elif p >= page_obj.number|add:'-2' and p <= page_obj.number|add:'2' %}
+                <li class="page-item"><a class="page-link" href="?page={{ p }}">{{ p }}</a></li>
+              {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+              <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+              <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a></li>
+            {% else %}
+              <li class="page-item disabled"><span class="page-link">Next</span></li>
+              <li class="page-item disabled"><span class="page-link">Last</span></li>
+            {% endif %}
+          </ul>
+        </nav>
+
+        <div class="text-end text-muted small">
+          Showing {{ page_obj.start_index }} out of {{ page_obj.paginator.count }} entries
+        </div>
+
       </div>
     </div>
+
   </div>
 </div>
 {% endblock %}
