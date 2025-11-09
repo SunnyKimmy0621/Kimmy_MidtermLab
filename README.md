@@ -1,12 +1,11 @@
 # Kimmy_MidtermLab
 
 ## 🧩 Project Description
-This project is a Django web application designed to manage JYP Entertainment's Department, Jobs, Organizations, and Employee's memberships efficiently.  
+U Can Do It! is a Django web application designed to manage a Customer/Client's Tasks and To-Do Lists efficiently.  
 It allows admin users to view and manage work and organizational data through Django’s admin panel.
 
 ## 🚀 Features
-- Department, Job, and Organization Management  
-- Employee and Organization Membership Tracking  
+- Task Management  
 - Admin Interface with Search and Filters  
 - Fake Data Generation using Faker Library  
 
