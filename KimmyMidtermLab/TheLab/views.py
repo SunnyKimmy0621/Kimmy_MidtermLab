@@ -1,10 +1,19 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
 from django.views.generic import TemplateView, ListView, CreateView, UpdateView, DeleteView
+from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
 from django.db.models import Q
 from django.utils import timezone
 from TheLab.models import Category, Note, Priority, Task, SubTask
 from TheLab.forms import CategoryForm, NoteForm, PriorityForm, SubTaskForm, TaskForm
+
+class LoginPageView(LoginView):
+    template_name = "login.html"
+    redirect_authenticated_user = True
+
+    def get_success_url(self):
+        return reverse_lazy("dashboard")
 
 class HomePageView(TemplateView):
     template_name = "home.html"
@@ -29,7 +38,6 @@ class HomePageView(TemplateView):
         context["recent_tasks"] = Task.objects.order_by("-created_at")[:5]
         return context
 
-
 class SearchableSortableListView(ListView):
     search_fields = []
     ordering_fields = []
@@ -53,7 +61,6 @@ class SearchableSortableListView(ListView):
 
         return qs
 
-
 class CategoryList(SearchableSortableListView):
     model = Category
     context_object_name = "category"
@@ -73,7 +80,6 @@ class NoteList(SearchableSortableListView):
     ordering_fields = ["task", "-task", "content", "-content"]
     default_order = "task"
 
-
 class PriorityList(SearchableSortableListView):
     model = Priority
     context_object_name = "priority"
@@ -82,7 +88,6 @@ class PriorityList(SearchableSortableListView):
     search_fields = ["name"]
     ordering_fields = ["name", "-name"]
     default_order = "name"
-
 
 class SubtaskList(SearchableSortableListView):
     model = SubTask
@@ -93,7 +98,6 @@ class SubtaskList(SearchableSortableListView):
     ordering_fields = ["task", "title", "status", "-task", "-title", "-status"]
     default_order = "title"
 
-
 class TaskList(SearchableSortableListView):
     model = Task
     context_object_name = "task"
@@ -102,7 +106,6 @@ class TaskList(SearchableSortableListView):
     search_fields = ["title", "description", "deadline", "status"]
     ordering_fields = ["title", "deadline", "status", "-title", "-deadline", "-status"]
     default_order = "title"
-
 
 # Create Views
 class CategoryCreateView(CreateView):
@@ -135,7 +138,6 @@ class TaskCreateView(CreateView):
     template_name = 'task_form.html'
     success_url = reverse_lazy('task-list')
 
-
 # Update Views
 class CategoryUpdateView(UpdateView):
     model = Category
@@ -166,7 +168,6 @@ class TaskUpdateView(UpdateView):
     form_class = TaskForm
     template_name = 'task_form.html'
     success_url = reverse_lazy('task-list')
-
 
 # Delete Views
 class CategoryDeleteView(DeleteView):
