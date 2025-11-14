@@ -7,8 +7,12 @@ from django.db.models import Q
 from django.utils import timezone
 from TheLab.models import Category, Note, Priority, Task, SubTask
 from TheLab.forms import CategoryForm, NoteForm, PriorityForm, SubTaskForm, TaskForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 
-class LoginPageView(LoginView):
+def home_redirect(request):
+    return redirect('dashboard')
+
+class LoginPageView(LoginRequiredMixin, LoginView):
     template_name = "login.html"
     redirect_authenticated_user = True
 

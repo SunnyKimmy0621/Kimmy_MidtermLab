@@ -2246,7 +2246,8 @@ body {
   min-height: 100%;
   float: right;
   /* background: #c1f1e6 !important; Sea Mist is the chosen color */
-   background: #ffdcf0 !important; /* Powder Blossom is the chosen color */
+  /* background: #ffdcf0 !important; Powder Blossom is the chosen color */
+   background: #c3ebbb !important; /* Green Blossom is the chosen color */
 }
 .main-panel .content {
   padding: 30px 15px;

@@ -51,6 +51,7 @@ if "pythonanywhere" in socket.gethostname():
     SITE_ID = 3 # production site (psusphere.pythonanywhere.com) # test
 else:
     SITE_ID = 1 # local site (127.0.0.1:8000)
+    
 AUTHENTICATION_BACKENDS = [
 'django.contrib.auth.backends.ModelBackend',
 'allauth.account.auth_backends.AuthenticationBackend',
@@ -86,12 +87,13 @@ TEMPLATES = [
 ]
 
 
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [ BASE_DIR / 'static']
-STATICFILES_ROOT = (
-    BASE_DIR / 'staticfiles',
-)
+STATIC_URL = 'static/'
 
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
+
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 WSGI_APPLICATION = 'KimmyMidterm_Lab.wsgi.application'
 
 
