@@ -2247,7 +2247,7 @@ body {
   float: right;
   /* background: #c1f1e6 !important; Sea Mist is the chosen color */
   /* background: #ffdcf0 !important; Powder Blossom is the chosen color */
-   background: #c3ebbb !important; /* Green Blossom is the chosen color */
+   background: #e5fae1!important; /* Green Blossom is the chosen color */
 }
 .main-panel .content {
   padding: 30px 15px;
@@ -5073,6 +5073,33 @@ body {
 /*     Card     */
 .card {
   border-radius: 0px;
+  background-color: #ece3d2;
+  margin-bottom: 30px;
+  -webkit-box-shadow: 0px 1px 15px 1px rgba(69, 65, 78, 0.08);
+  -moz-box-shadow: 0px 1px 15px 1px rgba(69, 65, 78, 0.08);
+  box-shadow: 0px 1px 15px 1px rgba(69, 65, 78, 0.08);
+  border: 1px solid #eee;
+}
+.card1-custom {
+  border-radius: 0px;
+  background-color: #fcebf1;
+  margin-bottom: 30px;
+  -webkit-box-shadow: 0px 1px 15px 1px rgba(69, 65, 78, 0.08);
+  -moz-box-shadow: 0px 1px 15px 1px rgba(69, 65, 78, 0.08);
+  box-shadow: 0px 1px 15px 1px rgba(69, 65, 78, 0.08);
+  border: 1px solid #eee;
+}
+.card11-custom {
+  border-radius: 0px;
+  background-color: #e6e6fc;
+  margin-bottom: 30px;
+  -webkit-box-shadow: 0px 1px 15px 1px rgba(69, 65, 78, 0.08);
+  -moz-box-shadow: 0px 1px 15px 1px rgba(69, 65, 78, 0.08);
+  box-shadow: 0px 1px 15px 1px rgba(69, 65, 78, 0.08);
+  border: 1px solid #eee;
+}
+.card1 {
+  border-radius: 0px;
   background-color: #ffffff;
   margin-bottom: 30px;
   -webkit-box-shadow: 0px 1px 15px 1px rgba(69, 65, 78, 0.08);
@@ -5186,11 +5213,11 @@ body {
 }
 
 .card-default .card-category, .card-primary .card-category, .card-info .card-category, .card-success .card-category, .card-warning .card-category, .card-danger .card-category, .card-default .card-title, .card-primary .card-title, .card-info .card-title, .card-success .card-title, .card-warning .card-title, .card-danger .card-title, .card-default label, .card-primary label, .card-info label, .card-success label, .card-warning label, .card-danger label {
-  color: #ffffff;
+  color: #110f0f;
 }
 
 .card-default .icon-big > i, .card-primary .icon-big > i, .card-info .icon-big > i, .card-success .icon-big > i, .card-warning .icon-big > i, .card-danger .icon-big > i {
-  color: #ffffff !important;
+  color: #2e2121 !important;
 }
 
 .card-default .card-footer, .card-primary .card-footer, .card-info .card-footer, .card-success .card-footer, .card-warning .card-footer, .card-danger .card-footer {
@@ -5202,19 +5229,19 @@ body {
 }
 
 .card-primary {
-  background: #1D62F0;
+  background: #d9e99f;
 }
 
 .card-info {
-  background: #23CCEF;
+  background: #ebf1aa;
 }
 
 .card-success {
-  background: #59d05d;
+  background: #fcebf1;
 }
 
 .card-warning {
-  background: #fbad4c;
+  background: #f4c7d0;
 }
 
 .card-danger {
