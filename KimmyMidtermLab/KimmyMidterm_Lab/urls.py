@@ -8,11 +8,12 @@ from TheLab.views import (
     CategoryDeleteView, NoteDeleteView, PriorityDeleteView, SubtaskDeleteView, TaskDeleteView
 )
 from TheLab import views
+from django.contrib.auth.decorators import login_required
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("accounts/", include("allauth.urls")),
-    path('', views.HomePageView.as_view(), name='home'),
+    path('', login_required(HomePageView.as_view()), name='home'),
     path('', include('pwa.urls')),
 
     # LIST VIEWS
